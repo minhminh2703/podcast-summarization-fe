@@ -10,9 +10,8 @@ interface AuthInputFieldsProps {
   setPassword: (password: string) => void;
 }
 
-const AuthInputFields: React.FC<AuthInputFieldsProps> = () => {
+const AuthInputFields: React.FC<AuthInputFieldsProps> = ({email, password, setEmail, setPassword}) => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -24,6 +23,8 @@ const AuthInputFields: React.FC<AuthInputFieldsProps> = () => {
         label="Email address"
         type="email"
         required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         {...commonStyles}
         slotProps={{
           input: {
@@ -34,6 +35,8 @@ const AuthInputFields: React.FC<AuthInputFieldsProps> = () => {
       <TextField
         label="Password"
         type={showPassword ? 'text' : 'password'}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         {...commonStyles}
         slotProps={{
           input: {

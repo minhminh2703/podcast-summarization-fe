@@ -1,7 +1,9 @@
-import { Box, Button, Checkbox, colors, FormControlLabel, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Tab, Tabs, Typography } from '@mui/material';
 import * as React from 'react';
 import podcastBg from '../../assets/podcast_bg.jpg'
 import AuthInputFields from './components/auth-input-fields';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 type AuthTabProps = {
     children?: React.ReactNode;
@@ -35,13 +37,34 @@ function a11yProps(index: number) {
 
 export default function AuthTabsForm() {
     const [value, setValue] = React.useState(0);
-
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const navigate = useNavigate();
 
     const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     }
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            throw new Error('Email and password are required');
+        }
+        try {
+            const response = await axios.post('http://localhost:8000/auth/login', {
+                email: email,
+                password: password
+            });
+
+            if (response.data && response.data.access_token) {
+                navigate('/home');
+                localStorage.setItem('access_token', response.data.access_token);  
+                console.log('Access token saved:', response.data.access_token);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <Box sx={{ display: 'flex', height: '100vh', flexDirection: 'row' }}>
@@ -153,7 +176,7 @@ export default function AuthTabsForm() {
                                         outline: 'none'
                                     }
                                 }}
-
+                                onClick={handleLogin}
                             >
                                 LOGIN
                             </Button>
