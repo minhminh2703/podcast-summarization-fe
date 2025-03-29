@@ -39,7 +39,7 @@ export default function AuthTabsForm({ setIsAuthenticated }: AuthTabsFormProps) 
             });
 
             if (response.data && response.data.access_token) {
-                navigate('/workspace');
+                navigate('/summarize');
                 setIsAuthenticated(true);
                 localStorage.setItem('access_token', response.data.access_token);
                 console.log('Access token saved:', response.data.access_token);
