@@ -4,29 +4,8 @@ import podcastBg from '../../assets/podcast_bg.jpg'
 import AuthInputFields from './components/auth-input-fields';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CustomTabPanel from '../../components/custom-tab-panel';
 
-type AuthTabProps = {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function CustomTabPanel(props: AuthTabProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-            style={{ padding: 20, paddingLeft: 30, paddingRight: 30 }}
-        >
-            {value === index && <div>{children}</div>}
-        </div>
-    );
-}
 
 function a11yProps(index: number) {
     return {
@@ -35,7 +14,11 @@ function a11yProps(index: number) {
     };
 }
 
-export default function AuthTabsForm() {
+type AuthTabsFormProps = {
+    setIsAuthenticated: (isAuthenticated: boolean) => void;
+};
+
+export default function AuthTabsForm({ setIsAuthenticated }: AuthTabsFormProps) {
     const [value, setValue] = React.useState(0);
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -56,7 +39,8 @@ export default function AuthTabsForm() {
             });
 
             if (response.data && response.data.access_token) {
-                navigate('/home');
+                navigate('/workspace');
+                setIsAuthenticated(true);
                 localStorage.setItem('access_token', response.data.access_token);  
                 console.log('Access token saved:', response.data.access_token);
             }
