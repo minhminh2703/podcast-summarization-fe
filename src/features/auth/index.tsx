@@ -41,7 +41,7 @@ export default function AuthTabsForm({ setIsAuthenticated }: AuthTabsFormProps) 
             if (response.data && response.data.access_token) {
                 navigate('/workspace');
                 setIsAuthenticated(true);
-                localStorage.setItem('access_token', response.data.access_token);  
+                localStorage.setItem('access_token', response.data.access_token);
                 console.log('Access token saved:', response.data.access_token);
             }
         }
@@ -106,7 +106,11 @@ export default function AuthTabsForm({ setIsAuthenticated }: AuthTabsFormProps) 
                     }}
                 >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', background: 'black', justifyContent: 'center' }}>
-                        <Tabs value={value} onChange={handleChangeTab} aria-label="auth tabs" textColor="inherit" variant="fullWidth" sx={{ justifyContent: 'center' }} TabIndicatorProps={{ style: { backgroundColor: 'white' } }}>
+                        <Tabs value={value} onChange={handleChangeTab} aria-label="auth tabs" textColor="inherit" variant="fullWidth" sx={{ justifyContent: 'center' }} slotProps={{
+                            indicator: {
+                                style: { backgroundColor: 'white' }, // Style for the tab indicator
+                            },
+                        }}>
                             <Tab label="LOG IN" {...a11yProps(0)} sx={{
                                 color: 'white',
                                 fontSize: '0.9em',
