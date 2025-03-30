@@ -1,30 +1,11 @@
-import { Box, Button, Checkbox, colors, FormControlLabel, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Tab, Tabs, Typography } from '@mui/material';
 import * as React from 'react';
 import podcastBg from '../../assets/podcast_bg.jpg'
 import AuthInputFields from './components/auth-input-fields';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import CustomTabPanel from '../../components/custom-tab-panel';
 
-type AuthTabProps = {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function CustomTabPanel(props: AuthTabProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-            style={{ padding: 20, paddingLeft: 30, paddingRight: 30 }}
-        >
-            {value === index && <div>{children}</div>}
-        </div>
-    );
-}
 
 function a11yProps(index: number) {
     return {
@@ -33,15 +14,41 @@ function a11yProps(index: number) {
     };
 }
 
-export default function AuthTabsForm() {
-    const [value, setValue] = React.useState(0);
+type AuthTabsFormProps = {
+    setIsAuthenticated: (isAuthenticated: boolean) => void;
+};
 
+export default function AuthTabsForm({ setIsAuthenticated }: AuthTabsFormProps) {
+    const [value, setValue] = React.useState(0);
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const navigate = useNavigate();
 
     const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     }
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            throw new Error('Email and password are required');
+        }
+        try {
+            const response = await axios.post('http://localhost:8000/auth/login', {
+                email: email,
+                password: password
+            });
+
+            if (response.data && response.data.access_token) {
+                navigate('/summarize');
+                setIsAuthenticated(true);
+                localStorage.setItem('access_token', response.data.access_token);
+                console.log('Access token saved:', response.data.access_token);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <Box sx={{ display: 'flex', height: '100vh', flexDirection: 'row' }}>
@@ -99,7 +106,11 @@ export default function AuthTabsForm() {
                     }}
                 >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', background: 'black', justifyContent: 'center' }}>
-                        <Tabs value={value} onChange={handleChangeTab} aria-label="auth tabs" textColor="inherit" variant="fullWidth" sx={{ justifyContent: 'center' }} TabIndicatorProps={{ style: { backgroundColor: 'white' } }}>
+                        <Tabs value={value} onChange={handleChangeTab} aria-label="auth tabs" textColor="inherit" variant="fullWidth" sx={{ justifyContent: 'center' }} slotProps={{
+                            indicator: {
+                                style: { backgroundColor: 'white' }, // Style for the tab indicator
+                            },
+                        }}>
                             <Tab label="LOG IN" {...a11yProps(0)} sx={{
                                 color: 'white',
                                 fontSize: '0.9em',
@@ -153,7 +164,7 @@ export default function AuthTabsForm() {
                                         outline: 'none'
                                     }
                                 }}
-
+                                onClick={handleLogin}
                             >
                                 LOGIN
                             </Button>
