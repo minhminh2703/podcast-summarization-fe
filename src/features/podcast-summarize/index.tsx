@@ -5,7 +5,7 @@ import SummarizeLinkInput from './components/summarize-link';
 import SummarizeFileInput from './components/summarize-file';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { BorderBottom } from '@mui/icons-material';
+
 
 enum TabValue {
   SUMMARIZE_LINK = 0,
@@ -40,7 +40,7 @@ const PodcastSummarize: React.FC = () => {
             outline: 'none',
           },
           "&.Mui-selected": {
-            BorderBottom: 'none',
+            borderBottom: 'none',
           }
         }} />
         <Tab icon={<AttachFileIcon />} iconPosition="start" label='File upload' value={TabValue.SUMMARIZE_FILE} sx={{
@@ -53,7 +53,7 @@ const PodcastSummarize: React.FC = () => {
             outline: 'none',
           },
           "&.Mui-selected": {
-            BorderBottom: 'none',
+            borderBottom: 'none',
           }
         }} />
       </Tabs>

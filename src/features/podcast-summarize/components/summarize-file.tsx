@@ -37,7 +37,7 @@ const SummarizeFileInput: React.FC = () => {
                 {...getRootProps()}
             >
                 <input {...getInputProps()} />
-                <UploadFileIcon fontSize="large" sx={{ fontSize: '4em', fontColor: '#29435C' }} />
+                <UploadFileIcon fontSize="large" sx={{ fontSize: '4em', color: '#29435C' }} />
                 <Typography variant="h6" sx={{ marginTop: 2, fontFamily: 'IBM Plex Mono', fontSize: '1em' }}>
                     Drag and drop a file to summarize
                 </Typography>
