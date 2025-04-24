@@ -1,4 +1,4 @@
-import React, { useState, useMemo, ChangeEvent } from 'react';
+import React, { useState, useMemo, ChangeEvent, useEffect } from 'react';
 import {
     Card,
     CardMedia,
@@ -10,12 +10,34 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import { SwapVert as SortIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export interface HistoryItemData {
     id: string;
     thumbnail: string;
     title: string;
     date: Date;
+}
+
+interface DetailSummarization {
+    header: string;
+    title: string;
+    start: number;
+    end: number;
+    content: string;
+}
+
+interface PodcastSummary {
+    detailSummarization: DetailSummarization[];
+    thumbnailUrl: string;
+    title: string;
+    overallSummarization: string;
+    createdAt: Date;
+}
+
+interface PodcastSummaryList {
+    podcasts: PodcastSummary[];
 }
 
 interface HistoryItemProps extends HistoryItemData {
@@ -30,7 +52,10 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({
     date,
     onOpen,
 }) => (
-    <Card sx={{ maxWidth: 345, backgroundColor: '#212121', borderRadius: '5%', padding: 2 }}>
+    <Card 
+        onClick={() => onOpen(id)}
+        sx={{ maxWidth: 345, backgroundColor: '#212121', borderRadius: '5%', padding: 2 }}
+    >
         <CardMedia
             component="img"
             height="150"
@@ -82,11 +107,35 @@ interface PodcastHistoryProps {
 }
 
 export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
+    const [podcasts, setPodcasts] = useState<PodcastSummaryList>();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [sortNewestFirst, setSortNewestFirst] = useState<boolean>(true);
+    const navigate = useNavigate();
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value);
     const toggleSortOrder = () => setSortNewestFirst(prev => !prev);
+
+    useEffect(() => {
+        const fetchPodcasts = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/podcast/summarizations', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`, 
+                        'Content-Type': '*/*', 
+                    }
+                });
+    
+                if (response.data) {
+                    setPodcasts(response.data);
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchPodcasts();    
+    }, [])
 
     const filtered = useMemo(() =>
         items
@@ -100,7 +149,7 @@ export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
         [items, searchTerm, sortNewestFirst]
     );
 
-    const handleOpen = (id: string) => console.log('Open', id);
+    const handleOpen = (id: string) => navigate(`/history/${id}`);
     const handleDelete = (id: string) => console.log('Delete', id);
 
     return (
