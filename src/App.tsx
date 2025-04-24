@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Auth from './features/auth';
 import MainLayout from './components/layouts/main-layout';
 import PodcastSummarize from './features/podcast-summarize';
+import PodcastHistory from './features/podcast-history';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,6 +43,7 @@ function App() {
         {/* Protected routes */}
         <Route path="/" element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
           <Route path='summarize' element={<PodcastSummarize />} />
+          <Route path="history" element={<PodcastHistory />} />
         </Route>
       </Routes>
     </Router>
