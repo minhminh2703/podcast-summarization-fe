@@ -49,7 +49,7 @@ export default function SideBar() {
                 }}
             >
                 <Link
-                    to="/summarize"
+                    to="/home"
                     style={{
                         textDecoration: 'none',
                         color: 'inherit',

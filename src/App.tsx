@@ -4,6 +4,7 @@ import Auth from './features/auth';
 import MainLayout from './components/layouts/main-layout';
 import PodcastSummarize from './features/podcast-summarize';
 import HistoryPage from './features/podcast-history';
+import HomeLayout from './components/layouts/home-layout';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -36,6 +37,8 @@ function App() {
       <Routes>
         {/* Default path */}
         <Route path="/" element={<Navigate to={isAuthenticated ? "/summarize" : "/auth"} />} />
+        <Route path="/home" element={<HomeLayout />} />
+
 
         {/* Auth page */}
         <Route path="/auth" element={<Auth setIsAuthenticated={setIsAuthenticated} />} />

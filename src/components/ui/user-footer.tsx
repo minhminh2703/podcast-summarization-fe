@@ -12,10 +12,22 @@ import {
     Typography
 } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { UserInfo } from '../../api/user.api';
+import { User } from '../../types/user';
 
 export default function UserFooter() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('user_id');
+        if (storedUserId) {
+            UserInfo(storedUserId)
+                .then(data => setUser(data))
+                .catch(err => console.error('Failed to fetch user info:', err));
+        }
+    }, []);
 
     const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -68,7 +80,7 @@ export default function UserFooter() {
                 onClick={handleOpenMenu}
             >
                 <Avatar
-                    src=""
+                    src={user?.profile_picture ?? ''}
                     sx={{ width: 28, height: 28 }}
                 />
                 <Typography noWrap variant="body2" sx={{
@@ -76,7 +88,7 @@ export default function UserFooter() {
                     fontWeight: '400',
                     fontSize: '1.1em'
                 }}>
-                    nguyenthiminhminh.hcm@gmail.com
+                    {user?.email || 'Loading...'}
                 </Typography>
             </Box>
 
