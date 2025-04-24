@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Auth from './features/auth';
 import MainLayout from './components/layouts/main-layout';
 import PodcastSummarize from './features/podcast-summarize';
+import HistoryPage from './features/podcast-history';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -12,7 +13,7 @@ function App() {
     const token = localStorage.getItem('access_token');
 
     if (token) {
-      const tokenExpiration = localStorage.getItem('token_expiration'); 
+      const tokenExpiration = localStorage.getItem('token_expiration');
       const currentTime = new Date().getTime();
 
       if (tokenExpiration && currentTime > parseInt(tokenExpiration)) {
@@ -20,14 +21,14 @@ function App() {
         localStorage.removeItem('token_expiration');
         setIsAuthenticated(false);
       } else {
-        setIsAuthenticated(true); 
+        setIsAuthenticated(true);
       }
     }
     setLoading(false);
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -42,7 +43,9 @@ function App() {
         {/* Protected routes */}
         <Route path="/" element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
           <Route path='summarize' element={<PodcastSummarize />} />
+          <Route path='history' element={<HistoryPage />} />
         </Route>
+
       </Routes>
     </Router>
   );
