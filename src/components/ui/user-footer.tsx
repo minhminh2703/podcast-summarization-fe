@@ -39,7 +39,8 @@ export default function UserFooter() {
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');
-        window.location.href = '/auth';
+        localStorage.removeItem('user_id');
+        window.location.href = '/home';
     };
 
     return (

@@ -14,7 +14,6 @@ const NavBar: React.FC<NavBarProps> = ({ userEmail, userAvatarUrl }) => {
     const handleLogout = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('user_id');
-        // trigger a reload or parent update so NavBar prop userEmail becomes undefined
         navigate(0);
     };
 
