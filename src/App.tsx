@@ -4,6 +4,8 @@ import Auth from './features/auth';
 import MainLayout from './components/layouts/main-layout';
 import PodcastSummarize from './features/podcast-summarize';
 import HistoryPage from './features/podcast-history';
+import PodcastHistory from './features/podcast-history';
+import PodcastHistoryDetail from './features/podcast-history/podcast-history-detail';
 import HomeLayout from './components/layouts/home-layout';
 
 function App() {
@@ -47,6 +49,7 @@ function App() {
         <Route path="/" element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
           <Route path='summarize' element={<PodcastSummarize />} />
           <Route path='history' element={<HistoryPage />} />
+          <Route path="history/:id" element={<PodcastHistoryDetail />} />
         </Route>
 
       </Routes>

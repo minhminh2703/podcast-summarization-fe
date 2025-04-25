@@ -24,7 +24,7 @@ export default function MainLayout() {
             </Drawer>
 
             <Box component="main" sx={{ flexGrow: 1, bgcolor: '#0C0C0C', p: 3, minHeight: '100vh' }}>
-                <Toolbar />
+                {/* <Toolbar /> */}
                 <Outlet />
             </Box>
         </Box>
