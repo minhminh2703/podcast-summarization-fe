@@ -91,7 +91,7 @@ const commonStyles: TextFieldProps = {
           borderBottom: '3px solid #5B913B',
       },
       '& .MuiInputLabel-root.Mui-focused': {
-          color: '#3A7D44',
+          color: '#5B913B',
           fontWeight: '600',
       },
   }
