@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
-import VideoAndTimestampSummary from '../components/video-timestamp-summary';
-import FullSummary from '../components/full-summary';
-import TextBar from '../components/text-bar';
+import VideoAndTimestampSummary from './components/video-timestamp-summary';
+import FullSummary from './components/full-summary';
+import TextBar from './components/text-bar';
 import { useParams } from 'react-router-dom';
 
 const PodcastHistoryDetail: React.FC = () => {

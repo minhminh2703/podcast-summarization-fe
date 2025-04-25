@@ -7,61 +7,64 @@ import {
     Typography,
     Box,
     Button,
+    Chip,
+    CircularProgress,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import { SwapVert as SortIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { getAllPodcasts } from '../../api/user.api';
 
 export interface HistoryItemData {
-    id: string;
-    thumbnail: string;
+    podcast_id: string;
+    thumbnail_url: string;
     title: string;
-    date: Date;
+    created_at: Date;
+    language: string;
 }
 
-interface DetailSummarization {
-    header: string;
-    title: string;
-    start: number;
-    end: number;
-    content: string;
-}
+// interface DetailSummarization {
+//     header: string;
+//     title: string;
+//     start: number;
+//     end: number;
+//     content: string;
+// }
 
-interface PodcastSummary {
-    detailSummarization: DetailSummarization[];
-    thumbnailUrl: string;
-    title: string;
-    overallSummarization: string;
-    createdAt: Date;
-}
+// interface PodcastSummary {
+//     detailSummarization: DetailSummarization[];
+//     thumbnailUrl: string;
+//     title: string;
+//     overallSummarization: string;
+//     createdAt: Date;
+// }
 
 interface PodcastSummaryList {
-    podcasts: PodcastSummary[];
+    podcasts: HistoryItemData[];
 }
 
 interface HistoryItemProps extends HistoryItemData {
-    onOpen: (id: string) => void;
-    onDelete: (id: string) => void;
+    onOpen: (podcast_id: string) => void;
 }
 
 export const HistoryItem: React.FC<HistoryItemProps> = ({
-    id,
-    thumbnail,
+    podcast_id,
+    thumbnail_url,
     title,
-    date,
+    created_at,
+    language,
     onOpen,
 }) => (
-    <Card 
-        onClick={() => onOpen(id)}
-        sx={{ maxWidth: 345, backgroundColor: '#212121', borderRadius: '5%', padding: 2 }}
+    <Card
+        onClick={() => onOpen(podcast_id)}
+        sx={{ maxWidth: 345, backgroundColor: '#212121', borderRadius: '5%', padding: 1 }}
     >
         <CardMedia
             component="img"
             height="150"
-            image={thumbnail}
+            image={thumbnail_url}
             alt={title}
-            sx={{ borderRadius: '5%', objectFit: 'cover', marginBottom: 1.5 }}
+            sx={{ borderRadius: '5%', objectFit: 'cover', marginBottom: 1 }}
         />
         <CardHeader
             title={
@@ -72,17 +75,61 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({
                     fontWeight: '600',
                     textAlign: 'left',
                     marginBottom: 0,
+                    padding: 1,
+                    py: 0,
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 2,
+                    overflow: 'hidden',
                 }} >
                     {title}
                 </Typography>
             }
-            subheader={date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            })
-            }
-
+            sx={{
+                textAlign: 'flex-start',
+                fontSize: '1em',
+                padding: 0
+            }}
+            subheader={(
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        p: 0,
+                        paddingTop: 1.5
+                    }}
+                >
+                    <Chip
+                        label={language.toUpperCase()}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                            fontFamily: 'IBM Plex Mono',
+                            fontSize: '0.7em',
+                            fontWeight: 500,
+                            color: '#B0BEC5',
+                            borderColor: '#B0BEC5',
+                            ml: 1,
+                        }}
+                    />
+                    <Typography
+                        component="span"
+                        sx={{
+                            fontFamily: 'IBM Plex Mono',
+                            fontSize: '0.8em',
+                            color: '#B0BEC5',
+                            fontWeight: 500,
+                        }}
+                    >
+                        {created_at.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}
+                    </Typography>
+                </Box>)}
             slotProps={{
                 subheader: {
                     fontFamily: 'IBM Plex Mono',
@@ -90,13 +137,7 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({
                     color: '#B0BEC5',
                     fontWeight: '500',
                     textAlign: 'right',
-                    padding: 1,
                 }
-            }}
-            sx={{
-                textAlign: 'flex-start',
-                fontSize: '1em',
-                padding: 0
             }}
         />
     </Card>
@@ -107,7 +148,6 @@ interface PodcastHistoryProps {
 }
 
 export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
-    const [podcasts, setPodcasts] = useState<PodcastSummaryList>();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [sortNewestFirst, setSortNewestFirst] = useState<boolean>(true);
     const navigate = useNavigate();
@@ -115,46 +155,23 @@ export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value);
     const toggleSortOrder = () => setSortNewestFirst(prev => !prev);
 
-    useEffect(() => {
-        const fetchPodcasts = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/podcast/summarizations', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`, 
-                        'Content-Type': '*/*', 
-                    }
-                });
-    
-                if (response.data) {
-                    setPodcasts(response.data);
-                }
-            }
-            catch (error) {
-                console.error(error);
-            }
-        }
-
-        fetchPodcasts();    
-    }, [])
-
     const filtered = useMemo(() =>
         items
             .filter(item =>
                 item.title.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .sort((a, b) => {
-                const diff = a.date.getTime() - b.date.getTime();
+                const diff = a.created_at.getTime() - b.created_at.getTime();
                 return sortNewestFirst ? -diff : diff;
             }),
         [items, searchTerm, sortNewestFirst]
     );
 
     const handleOpen = (id: string) => navigate(`/history/${id}`);
-    const handleDelete = (id: string) => console.log('Delete', id);
 
     return (
-        <Box sx={{ p: 2 }}>
-            <Grid container spacing={5} sx={{ mb: 2 }}>
+        <Box sx={{ p: 2, paddingTop: 5 }}>
+            <Grid container spacing={5} sx={{ mb: 5 }}>
                 <Grid size={{ xs: 12, sm: 6, md: 8 }}>
                     <TextField
                         variant="filled"
@@ -211,7 +228,7 @@ export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
                 <Grid>
                     <Button
                         variant="outlined"
-                        startIcon={<SortIcon fontSize="large"/>}
+                        startIcon={<SortIcon fontSize="large" />}
                         onClick={toggleSortOrder}
                         sx={{
                             height: 40,
@@ -233,11 +250,10 @@ export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
 
             <Grid container spacing={3}>
                 {filtered.map(item => (
-                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={item.id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={item.podcast_id}>
                         <HistoryItem
                             {...item}
                             onOpen={handleOpen}
-                            onDelete={handleDelete}
                         />
                     </Grid>
                 ))}
@@ -246,42 +262,34 @@ export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
     );
 };
 
-// --- Sample Data & Demo Component ---
-const sampleItems: HistoryItemData[] = [
-    {
-        id: '1',
-        thumbnail: 'https://forbes.vn/wp-content/uploads/2023/07/Taylor.webp',
-        title: 'Quarterly Report',
-        date: new Date('2025-03-29'),
-    },
-    {
-        id: '2',
-        thumbnail: 'https://forbes.vn/wp-content/uploads/2023/07/Taylor.webp',
-        title: 'Team Photo',
-        date: new Date('2025-04-01'),
-    },
-    {
-        id: '3',
-        thumbnail: 'https://forbes.vn/wp-content/uploads/2023/07/Taylor.webp',
-        title: 'Interview Audio',
-        date: new Date('2025-02-14'),
-    },
-    {
-        id: '4',
-        thumbnail: 'https://forbes.vn/wp-content/uploads/2023/07/Taylor.webp',
-        title: 'Project Summary',
-        date: new Date('2025-04-15'),
-    },
-    {
-        id: '5',
-        thumbnail: 'https://forbes.vn/wp-content/uploads/2023/07/Taylor.webp',
-        title: 'Landscape',
-        date: new Date('2025-03-05'),
-    },
-];
+export const HistoryPage: React.FC = () => {
+    const [podcasts, setPodcasts] = useState<HistoryItemData[]>([]);
+    const [loading, setLoading] = useState(true);
 
-export const HistoryPageDemo: React.FC = () => (
-    <PodcastHistory items={sampleItems} />
-);
+    useEffect(() => {
+        const fetchPodcasts = async () => {
+            try {
+                const data = await getAllPodcasts();
+                const items = data.map((item: any) => ({
+                    ...item,
+                    created_at: new Date(item.created_at),
+                }));
+                setPodcasts(items);
+            } catch (err) {
+                console.error('Fetch podcasts error:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-export default HistoryPageDemo;
+        fetchPodcasts();
+    }, []);
+
+    if (loading) {
+        return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
+    }
+
+    return <PodcastHistory items={podcasts} />;
+};
+
+export default HistoryPage;

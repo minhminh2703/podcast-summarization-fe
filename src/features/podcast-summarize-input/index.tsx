@@ -13,7 +13,7 @@ enum TabValue {
   SUMMARIZE_FILE = 1,
 }
 
-const PodcastSummarize: React.FC = () => {
+const PodcastSummarizeInput: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<TabValue>(TabValue.SUMMARIZE_LINK);
 
   const handleTabChange = (event: React.SyntheticEvent, newTabValue: TabValue) => {
@@ -22,7 +22,7 @@ const PodcastSummarize: React.FC = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', marginX: 4, paddingLeft: 6, marginBottom: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', marginX: 4, paddingLeft: 6, marginBottom: 3, marginTop: 5 }}>
         <Tabs
           value={selectedTab}
           onChange={handleTabChange}
@@ -77,4 +77,4 @@ const PodcastSummarize: React.FC = () => {
   );
 };
 
-export default PodcastSummarize;
+export default PodcastSummarizeInput;

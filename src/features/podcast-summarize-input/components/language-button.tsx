@@ -26,6 +26,8 @@ const LanguageToggleButton: React.FC = () => {
 
   return (
     <ButtonBase
+      disableRipple            
+      disableTouchRipple
       onClick={toggleLanguage}
       sx={{
         display: 'flex',
@@ -37,6 +39,9 @@ const LanguageToggleButton: React.FC = () => {
         boxShadow: 2,
         cursor: 'pointer',
         padding: 0,
+        '&:focusVisible': {
+          outline: 'none',
+        }
       }}
     >
       {/* Left side with circular flag */}

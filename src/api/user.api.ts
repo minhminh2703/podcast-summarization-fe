@@ -11,3 +11,13 @@ export const UserInfo = async (userId: string) => {
         throw error;
     }
 }
+
+export const getAllPodcasts = async () => {
+    try {
+        const response = await baseApi.get('/podcast/summarizations');
+        return response.data;
+    } catch (error) {
+        console.error("Get all podcasts error:", error);
+        throw error;
+    }
+}
