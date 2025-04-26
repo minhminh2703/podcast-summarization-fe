@@ -16,9 +16,9 @@ const TextBar: React.FC<{ text: string }> = ({ text }) => {
 
 // Styled component for the text bar
 const StyledTextBar = styled(Box)({
-    backgroundColor: '#d3d2d2', // Dark background
-    borderRadius: '20px', // Rounded corners
-    border: '1px solid #4A4A4A', // Border color
+    backgroundColor: '#d3d2d2', 
+    borderRadius: '20px', 
+    border: '1px solid #4A4A4A', 
     paddingLeft: '10px',
     display: 'flex',
     justifyContent: 'start',

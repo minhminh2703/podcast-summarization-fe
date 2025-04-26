@@ -3,7 +3,8 @@ import { Box, Typography, Button, Paper, IconButton } from '@mui/material';
 import { Add, ContentCopy, Download } from '@mui/icons-material';
 
 interface FullSummaryProps {
-    summary: string;
+    podcast_id: string | undefined;
+    summary?: string;
 }
 
 const FullSummary: React.FC<FullSummaryProps> = ({ summary }) => {

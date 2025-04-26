@@ -13,7 +13,7 @@ import {
 import Grid from '@mui/material/Grid2'
 import { SwapVert as SortIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { getAllPodcasts } from '../../api/user.api';
+import { getAllPodcasts } from '../../api/podcast.api';
 
 export interface HistoryItemData {
     podcast_id: string;
@@ -22,27 +22,6 @@ export interface HistoryItemData {
     created_at: Date;
     language: string;
 }
-
-// interface DetailSummarization {
-//     header: string;
-//     title: string;
-//     start: number;
-//     end: number;
-//     content: string;
-// }
-
-// interface PodcastSummary {
-//     detailSummarization: DetailSummarization[];
-//     thumbnailUrl: string;
-//     title: string;
-//     overallSummarization: string;
-//     createdAt: Date;
-// }
-
-interface PodcastSummaryList {
-    podcasts: HistoryItemData[];
-}
-
 interface HistoryItemProps extends HistoryItemData {
     onOpen: (podcast_id: string) => void;
 }
@@ -167,7 +146,7 @@ export const PodcastHistory: React.FC<PodcastHistoryProps> = ({ items }) => {
         [items, searchTerm, sortNewestFirst]
     );
 
-    const handleOpen = (id: string) => navigate(`/history/${id}`);
+    const handleOpen = (podcast_id: string) => navigate(`/history/${podcast_id}`);
 
     return (
         <Box sx={{ p: 2, paddingTop: 5 }}>

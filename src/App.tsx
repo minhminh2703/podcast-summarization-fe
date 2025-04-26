@@ -50,7 +50,7 @@ function App() {
         <Route path="/" element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
           <Route path='summarize' element={<PodcastSummarizeInput />} />
           <Route path='history' element={<PodcastHistory />} />
-          <Route path="history/:id" element={<PodcastSummarizeResult />} />
+          <Route path="history/:podcast_id" element={<PodcastSummarizeResult />} />
         </Route>
 
       </Routes>
