@@ -16,6 +16,8 @@ interface PodcastDetail {
     podcast_id: string;
     detail_summarization: DetailSummarization[];
     thumbnail_url: string;
+    podcast_type: string;
+    podcast_url: string;
     title: string;
     overall_summarization: string;
     language: string;
@@ -41,6 +43,7 @@ const VideoAndTimestampSummary: React.FC<VideoAndTimestampSummaryProps> = ({ pod
         const fetchData = async () => {
             try {
                 const res = await getPodcastById(podcast_id);
+                console.log(res);
                 setData(res);
             } catch (err: any) {
                 console.error('Error fetching podcast:', err);
@@ -83,15 +86,34 @@ const VideoAndTimestampSummary: React.FC<VideoAndTimestampSummaryProps> = ({ pod
 
             {/* Video Section */}
             <Box sx={{ mb: 2 }}>
+            {data!.podcast_type === 'youtube' ? (
                 <iframe
                     width="100%"
                     height="315"
-                    src={`https://www.youtube.com/embed/${extractYouTubeId(data!.thumbnail_url)}`}
+                    src={`https://www.youtube.com/embed/${extractYouTubeId(data!.podcast_url)}`}
                     title={data!.title}
-                    frameBorder="0"
+                    style={{ border: 'none', borderRadius: 8 }}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                 />
+                ) : (
+                <img
+                    src={data!.thumbnail_url}
+                    alt={data!.title}
+                    style={{
+                        width: '100%',         // fill container width
+                        maxWidth: '600px',      // ✅ limit max width
+                        maxHeight: '315px',     // ✅ limit max height (similar to YouTube iframe height)
+                        height: 'auto',         // ✅ keep aspect ratio
+                        objectFit: 'contain',   // ✅ make sure it fits inside without cropping
+                        borderRadius: 8,
+                        display: 'block',       // ✅ prevent small gaps below image
+                        marginLeft: 'auto',     // ✅ center if smaller
+                        marginRight: 'auto',
+                    }}
+                />
+                )}
+
             </Box>
 
             {/* Timestamp Summary */}
@@ -129,8 +151,8 @@ function formatTime(seconds: number): string {
 
 // Example: extract YouTube ID from thumbnail_url or other field
 function extractYouTubeId(url: string): string {
-    const match = url.match(/embed\/(.+)$/);
-    return match?.[1] || '';
+    const match = url.split('v=')[1]?.split('&')[0];
+    return match;
 }
 
 export default VideoAndTimestampSummary;

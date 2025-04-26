@@ -1,12 +1,41 @@
 import { Box, TextField, Button, Typography, List } from '@mui/material';
+import axios from 'axios';
+import { useState } from 'react';
 import { FaSpotify, FaYoutube } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
+import { summarizePodcast } from '../../../api/podcast.api';
 
+interface SummarizeLinkInputProps {
+    language: 'English' | 'Vietnamese';
+}
 
-export default function SummarizeLinkInput() {
+const SummarizeLinkInput: React.FC<SummarizeLinkInputProps> = ({ language }) => {
+    const [url, setUrl] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSummarize = async () => {
+        setLoading(true);
+        try {
+            const response = await summarizePodcast(url, language);
+            const podcastId = response.podcast_id; // Assuming the response contains the podcast ID
+            console.log('Summary:', response.data);
+
+            navigate(`/history/${podcastId}`); 
+            // you can do something with response here, like show it on UI
+        } catch (error) {
+            console.error('Error summarizing podcast:', error);
+        } finally {
+            setLoading(false); // stop loading
+        }
+    };
+
     const items = [
         { text: 'YouTube Videos / Podcasts', icon: <FaYoutube style={{ color: '#B33030', fontSize: '1.2em' }} /> },
         { text: 'Spotify Podcasts', icon: <FaSpotify style={{ color: '#1DB954', fontSize: '1.2em' }} /> },
     ]
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', gap: 5 }}>
             <Box
@@ -22,6 +51,7 @@ export default function SummarizeLinkInput() {
                 <TextField
                     variant="filled"
                     placeholder="Paste podcast URL here..."
+                    onChange={(e) => setUrl(e.target.value)}
                     fullWidth
                     id="filled-multiline-flexible"
                     maxRows={1}
@@ -62,6 +92,7 @@ export default function SummarizeLinkInput() {
                 <Button
                     fullWidth
                     variant="contained"
+                    onClick={handleSummarize}
                     sx={{
                         py: 1.2,
                         backgroundColor: 'black',
@@ -75,7 +106,7 @@ export default function SummarizeLinkInput() {
                         },
                     }}
                 >
-                    SUMMARIZE NOW
+                    {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'SUMMARIZE NOW'}
                 </Button>
             </Box>
             <Box
@@ -118,3 +149,6 @@ export default function SummarizeLinkInput() {
         </Box>
     );
 }
+
+export default SummarizeLinkInput;
+

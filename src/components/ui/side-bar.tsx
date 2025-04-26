@@ -89,7 +89,7 @@ export default function SideBar() {
                         ))}
                     </List>
                     <Divider variant="middle" sx={{ bgcolor: 'white', borderBottomWidth: 0.9 }} />
-                    <List sx={{ paddingLeft: 2 }}>
+                    {/* <List sx={{ paddingLeft: 2 }}>
                         {items.map((text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton component={Link} to={routeItems[index]}>
@@ -108,7 +108,7 @@ export default function SideBar() {
                                 </ListItemButton>
                             </ListItem>
                         ))}
-                    </List>
+                    </List> */}
                 </Box>
                 <UserFooter />
             </Box>

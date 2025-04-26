@@ -7,14 +7,16 @@ import LanguageToggleButton from './components/language-button';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
-
 enum TabValue {
   SUMMARIZE_LINK = 0,
   SUMMARIZE_FILE = 1,
 }
 
+type Language = 'English' | 'Vietnamese';
+
 const PodcastSummarizeInput: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<TabValue>(TabValue.SUMMARIZE_LINK);
+  const [language, setLanguage] = useState<Language>('English'); // ⬅️ New!
 
   const handleTabChange = (event: React.SyntheticEvent, newTabValue: TabValue) => {
     setSelectedTab(newTabValue);
@@ -45,7 +47,7 @@ const PodcastSummarizeInput: React.FC = () => {
               "&.Mui-selected": { borderBottom: 'none' },
             }}
           />
-          <Tab
+          {/* <Tab
             icon={<AttachFileIcon />}
             iconPosition="start"
             label="File upload"
@@ -59,19 +61,19 @@ const PodcastSummarizeInput: React.FC = () => {
               ":focus": { outline: 'none' },
               "&.Mui-selected": { borderBottom: 'none' },
             }}
-          />
+          /> */}
         </Tabs>
 
-        <LanguageToggleButton />
+        <LanguageToggleButton language={language} setLanguage={setLanguage} />
       </Box>
 
       <CustomTabPanel value={selectedTab} index={TabValue.SUMMARIZE_LINK}>
-        <SummarizeLinkInput />
+        <SummarizeLinkInput language={language} />
       </CustomTabPanel>
 
-      <CustomTabPanel value={selectedTab} index={TabValue.SUMMARIZE_FILE}>
+      {/* <CustomTabPanel value={selectedTab} index={TabValue.SUMMARIZE_FILE}>
         <SummarizeFileInput />
-      </CustomTabPanel>
+      </CustomTabPanel> */}
 
     </Box>
   );

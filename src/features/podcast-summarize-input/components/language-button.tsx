@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
 import { Box, Typography, ButtonBase } from '@mui/material';
 
-type Language = 'en' | 'vi';
+type Language = 'English' | 'Vietnamese';
 
 const languageMap: Record<Language, { code: string; flag: string; bgColor: string }> = {
-  en: {
+  English: {
     code: 'En',
     flag: 'https://flagcdn.com/w80/us.png',
     bgColor: '#1e3a8a',
   },
-  vi: {
+  Vietnamese: {
     code: 'Vi',
     flag: 'https://flagcdn.com/w80/vn.png',
     bgColor: '#e11d48',
   },
 };
 
-const LanguageToggleButton: React.FC = () => {
-  const [language, setLanguage] = useState<Language>('en');
+interface LanguageToggleButtonProps {
+  language: Language;
+  setLanguage: React.Dispatch<React.SetStateAction<Language>>;
+}
+
+const LanguageToggleButton: React.FC<LanguageToggleButtonProps> = ({ language, setLanguage }) => {
   const current = languageMap[language];
 
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === 'en' ? 'vi' : 'en'));
+    setLanguage((prev) => (prev === 'English' ? 'Vietnamese' : 'English'));
   };
 
   return (

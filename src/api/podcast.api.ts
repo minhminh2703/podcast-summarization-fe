@@ -19,3 +19,27 @@ export const getPodcastById = async (podcastId: string) => {
         throw error;
     }
 }
+
+export const summarizePodcast = async (url: string, target_language: 'English' | 'Vietnamese') => {
+    try {
+        const response = await baseApi.post(
+            '/podcast/summarize',
+            {
+                URL: url,
+                target_language: target_language,
+            },
+            {
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                },
+                timeout: 600000,
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Summarize podcast error:', error);
+        throw error;
+    }
+};
+  
