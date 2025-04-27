@@ -28,7 +28,6 @@ interface PodcastDetail {
 const PodcastHistoryResult: React.FC = () => {
     // match the route param name (e.g. '/history/:podcastId')
     const { podcast_id } = useParams<{ podcast_id: string }>();
-    console.log('Podcast ID:', podcast_id);
     const [data, setData] = useState<PodcastDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -71,9 +70,7 @@ const PodcastHistoryResult: React.FC = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', p: 2 }}>
-            {/* Use the podcast's actual video URL if available, otherwise embed ID */}
             <TextBar text={`https://www.youtube.com/watch?v=${podcast_id}`} />
-
             <Grid container spacing={2} sx={{ mt: 2 }}>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <VideoAndTimestampSummary podcast_id={podcast_id} />

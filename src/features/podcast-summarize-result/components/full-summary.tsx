@@ -73,7 +73,7 @@ const FullSummary: React.FC<FullSummaryProps> = ({ summary }) => {
                     </IconButton>
                 </Box>
 
-                <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '14px' }}>
+                <Typography variant="body1" sx={{ marginBottom: 1, fontSize: '14px', textAlign: 'justify' }}>
                     {summary}
                 </Typography>
             </Paper>

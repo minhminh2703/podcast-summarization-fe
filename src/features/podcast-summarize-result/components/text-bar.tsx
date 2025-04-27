@@ -4,9 +4,14 @@ import { styled } from '@mui/system';
 
 const TextBar: React.FC<{ text: string }> = ({ text }) => {
     return (
-        <Box sx={{ marginBottom: 2, width: '100%', borderBottom: '2px solid white' }}>
-            <StyledTextBar>
-                <Typography variant="body1" sx={{ color: 'black', padding: '10px' }}>
+        <Box sx={{ marginBottom: 2, width: '100%' }}>
+            <StyledTextBar sx={{ width: '100%', borderRadius: 3, }}>
+                <Typography variant="body1" sx={{
+                    color: 'black',
+                    padding: '0.7em',
+                    fontSize: '1em',
+                    fontFamily: 'IBM Plex Mono',
+                }}>
                     {text}
                 </Typography>
             </StyledTextBar>
@@ -14,11 +19,10 @@ const TextBar: React.FC<{ text: string }> = ({ text }) => {
     );
 };
 
-// Styled component for the text bar
 const StyledTextBar = styled(Box)({
-    backgroundColor: '#d3d2d2', 
-    borderRadius: '20px', 
-    border: '1px solid #4A4A4A', 
+    backgroundColor: '#d3d2d2',
+    borderRadius: '20px',
+    border: '1px solid #4A4A4A',
     paddingLeft: '10px',
     display: 'flex',
     justifyContent: 'start',

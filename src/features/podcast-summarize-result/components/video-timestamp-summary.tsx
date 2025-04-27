@@ -76,10 +76,10 @@ const VideoAndTimestampSummary: React.FC<VideoAndTimestampSummaryProps> = ({ pod
             {/* Title and Back Icon Section */}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <ArrowBack
-                    sx={{ color: '#E0E0E0', mr: 2, cursor: 'pointer', fontSize: 18 }}
+                    sx={{ color: '#E0E0E0', mr: 2, cursor: 'pointer', fontSize: '2em' }}
                     onClick={() => navigate(-1)}
                 />
-                <Typography variant="h6" sx={{ color: '#E0E0E0', fontSize: 15 }}>
+                <Typography variant="h6" sx={{ color: '#E0E0E0', fontSize: '1.2em', fontFamily: 'Winky Rough' }}>
                     {data?.title}
                 </Typography>
             </Box>

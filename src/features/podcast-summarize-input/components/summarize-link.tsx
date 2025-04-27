@@ -33,7 +33,7 @@ const SummarizeLinkInput: React.FC<SummarizeLinkInputProps> = ({ language }) => 
 
     const items = [
         { text: 'YouTube Videos / Podcasts', icon: <FaYoutube style={{ color: '#B33030', fontSize: '1.2em' }} /> },
-        { text: 'Spotify Podcasts', icon: <FaSpotify style={{ color: '#1DB954', fontSize: '1.2em' }} /> },
+        { text: 'RSS: Listen Notes/ Castos', icon: <FaSpotify style={{ color: '#1DB954', fontSize: '1.2em' }} /> },
     ]
 
     return (
